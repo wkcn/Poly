@@ -9,6 +9,8 @@
 #include <string>
 #include <queue>
 #include <stack>
+#include <vector>
+#include <utility>
 #include <map>
 #include <cstdlib>
 #include <ctime>

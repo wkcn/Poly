@@ -9,7 +9,7 @@ class Poly {
 private:
 	Vector<term> poly;
 public:
-	Poly(int co,int exp);
+	Poly(BigInt co,BigInt exp);
 	Poly();
 	friend Poly& operator+=(Poly&, const Poly&);
 	friend Poly& operator-=(Poly&, const Poly&);

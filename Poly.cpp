@@ -1,5 +1,9 @@
 #include "Poly.h"
 
+Poly::Poly(){}
+Poly::Poly(BigInt co,BigInt exp){
+	poly.push_back(make_pair(co, exp));
+}
 Poly& operator+=(Poly&a, const Poly&b) {
 	Vector<term> newPoly;
 	int i = 0, j = 0;
@@ -39,5 +43,16 @@ Poly& operator-=(Poly&a, const Poly&b) {
 		}
 	}
 	a.poly = newPoly;
+	return a;
+}
+
+Poly& operator*=(Poly&a, const Poly&b) {
+	Poly newPoly;
+	for (int i = 0;i < a.poly.size();++i) {
+		for (int j = 0;j < b.poly.size();++j) {
+			newPoly += Poly(a.poly[i].first*b.poly[j].first, a.poly[i].second*b.poly[j].second);
+		}
+	}
+	a = newPoly;
 	return a;
 }
