@@ -70,6 +70,7 @@ SSugar::SSugar(){
 	level[">"] = 3;
 	level[">="] = 3;
 	level["~"] = 15;
+	level["^"] = 15;
 	level[","] = 0;
 	level[";"] = 0;
 

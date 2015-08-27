@@ -103,6 +103,18 @@ Poly operator%(const Poly &a, const Poly &b){
 	return temp;
 }
 
+Poly pow(const Poly &a, int u){
+	Poly p = a;
+	Poly result = 1;
+	for (; u > 0; u >>= 1){
+		if (u & 1){
+			result *= p;
+		}
+		p *= p;
+	}
+	return result;
+}
+
 ostream& operator<<(ostream &os, Poly &u){
 
 	if (u.poly.size() == 0)os << 0;
@@ -134,6 +146,8 @@ ostream& operator<<(ostream &os, Poly &u){
 	}
 	return os;
 }
+
+
 
 bool operator==(const Poly&a, const Poly&b){
 	if (a.poly.size() != b.poly.size())return false;

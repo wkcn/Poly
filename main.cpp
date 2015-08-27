@@ -8,6 +8,20 @@
 using namespace std;
 
 int main(){
+
+	/*
+	Poly a = -2;
+	Poly t(1, 1);
+	a += t;
+	cout << a << endl;
+	Poly b = pow(a, 2);
+	cout << b << endl;
+	cout << pow(a, 3) << endl;
+	*/
+
+	Poly a(1, 1);
+	cout << a << endl;
+
 	SVM vm;
 	streamx ss;
 	srand(size_t(time(0)));

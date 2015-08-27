@@ -24,6 +24,7 @@ public:
 	friend Poly operator*(const Poly&, const Poly &);
 	friend Poly operator/(const Poly&, const Poly &);
 	friend Poly operator%(const Poly&, const Poly &);
+	friend Poly pow(const Poly&, int u);//出于效率，使用int
 
 	//friend int PolyCmp(const Poly&, const Poly&);	//比较用，返回负数时a<b;	0时a=b;	正数时a>b
 	friend bool operator==(const Poly&, const Poly&);
