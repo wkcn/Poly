@@ -2,6 +2,7 @@
 #define SLANG_DEFINES_H
 #define _CRT_SECURE_NO_WARNINGS
 #include "BigInt.h"
+#include "Poly.h"
 
 #include <iostream>
 #include <fstream>

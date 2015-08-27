@@ -1,6 +1,6 @@
-#ifndef VECTOR_H
+﻿#ifndef VECTOR_H
 #define VECTOR_H
-
+#pragma warning (disable:4819)
 /*
 	Vector类
 	这里的Vector类能自动根据下标调整空间大小

@@ -1,4 +1,4 @@
-#include "UBigInt.h"
+﻿#include "UBigInt.h"
 
 UBigInt::UBigInt(){
 	_len = 1;

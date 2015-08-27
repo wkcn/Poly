@@ -1,6 +1,5 @@
 #ifndef BIGINT_H
 #define BIGINT_H
-
 #include "UBigInt.h"
 //不知道是否能用继承UBigInt的方式实现？
 class BigInt{
