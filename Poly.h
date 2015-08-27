@@ -40,6 +40,7 @@ public:
 	bool isZero() const;//判断是否为0，用于快速判断
 	bool isNum() const;
 	int GetInt(); 
+	BigInt GetExp() const;
 public:
 	friend ostream& operator<<(ostream &, Poly &);
 	friend istream& operator>>(istream &, Poly &);

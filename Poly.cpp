@@ -67,8 +67,31 @@ Poly& operator*=(Poly&a, const Poly&b) {
 }
 
 Poly& operator/=(Poly&a, const Poly&b) {
+	/*
 	if (!a.isNum() || !b.isNum())throw "无法进行除法计算";
 	a.poly[0].first /= b.poly[0].first;
+	*/
+
+	if (b.poly.empty()) throw "不能除以0";
+	Vector<term> newPoly;
+	int offset = 0;
+	while (a.GetExp() >= b.GetExp() && !a.poly.empty() && offset < a.poly.size()) {
+		//下标0为最高次
+		term &at = a.poly[offset];
+		term &bt = b.poly[0];
+		BigInt co = at.first / bt.first;
+		if (co.isZero()) {
+			++offset;
+			continue;
+		}
+		BigInt ex = at.second - bt.second;
+		Poly s(co, ex);
+		newPoly.push_back(make_pair(co, ex));
+		a -= s*b;
+	}
+
+	a.poly = newPoly;
+
 	return a;
 }
 
@@ -221,6 +244,11 @@ int Poly::GetInt(){
 		}
 	}
 	return 0;
+}
+
+BigInt Poly::GetExp() const{
+	if (poly.empty())return 0;
+	return poly[poly.size() - 1].second;
 }
 
 istream& operator>>(istream &is, Poly &a){
