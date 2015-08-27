@@ -5,10 +5,11 @@ Poly::Poly(BigInt co,BigInt exp){
 	poly.push_back(make_pair(co, exp));
 }
 Poly::Poly(int num){
-	poly.push_back(make_pair(num, 0));
+	if (num != 0)poly.push_back(make_pair(num, 0));
 }
 Poly::Poly(const char *s){
-	poly.push_back(make_pair(BigInt(s), 0));
+	BigInt b = BigInt(s);
+	if (!b.isZero())poly.push_back(make_pair(b, 0));
 }
 Poly& operator+=(Poly&a, const Poly&b) {
 	Vector<term> newPoly;
@@ -66,11 +67,15 @@ Poly& operator*=(Poly&a, const Poly&b) {
 }
 
 Poly& operator/=(Poly&a, const Poly&b) {
-	throw "Don't Divide";
+	if (!a.isNum() || !b.isNum())throw "无法进行除法计算";
+	a.poly[0].first /= b.poly[0].first;
+	return a;
 }
 
 Poly& operator%=(Poly&a, const Poly&b) {
-	throw "Don't Mod";
+	if (!a.isNum() || !b.isNum())throw "无法进行取模计算";
+	a.poly[0].first %= b.poly[0].first;
+	return a;
 }
 
 Poly operator+(const Poly &a, const Poly &b){
@@ -115,6 +120,16 @@ Poly pow(const Poly &a, int u){
 	return result;
 }
 
+Poly Poly::Derivative() {
+	Poly newPoly;
+	for (int i = 0;i < poly.size();++i) {
+		if (!poly[i].second.isZero()) {
+			newPoly.poly.push_back(make_pair(poly[i].first*poly[i].second, poly[i].second - BigInt(1)));
+		}
+	}
+	return newPoly;
+}
+
 ostream& operator<<(ostream &os, Poly &u){
 
 	if (u.poly.size() == 0)os << 0;
@@ -123,8 +138,10 @@ ostream& operator<<(ostream &os, Poly &u){
 		for (int i = 0; i < u.poly.size(); ++i){
 			term &t = u.poly[i];
 
-			bool minus = t.first < BigInt(0);
+			bool minus = t.first.isMinus();
+			bool secondZero = t.second.isZero();
 			if (!minus && !first)os << '+';
+
 
 			if (t.first != BigInt(1)){
 				if (t.first == BigInt(-1))os << '-';
@@ -132,8 +149,13 @@ ostream& operator<<(ostream &os, Poly &u){
 					os << t.first;
 				}
 			}
+			else {
+				if (secondZero) {
+					os << t.first;
+				}
+			}
 
-			if (!t.second.isZero()){
+			if (!secondZero){
 				os << 'x';
 				if (t.second != BigInt(1)){
 					os << '^';
@@ -162,22 +184,32 @@ bool operator!=(const Poly&a, const Poly&b){
 }
 
 bool operator<(const Poly&a, const Poly&b){
-	throw "无法比较";
+	if (!a.isNum() || !b.isNum())throw "无法比较";
+	return a.poly[0].first < b.poly[0].first;
 }
 
 bool operator<=(const Poly&a, const Poly&b){
-	throw "无法比较";
+	if (!a.isNum() || !b.isNum())throw "无法比较";
+	return a.poly[0].first <= b.poly[0].first;
 }
 
 bool operator>(const Poly&a, const Poly&b){
-	throw "无法比较";
+	if (!a.isNum() || !b.isNum())throw "无法比较";
+	return a.poly[0].first > b.poly[0].first;
 }
 
 bool operator>=(const Poly&a, const Poly&b){
-	throw "无法比较";
+	if(!a.isNum()||!b.isNum())throw "无法比较";
+	return a.poly[0].first >= b.poly[0].first;
 }
 
-bool Poly::isZero(){
+bool Poly::isNum() const{
+	if (poly.size() == 0)return true;
+	if (poly[0].second.isZero())return true;
+	return false;
+}
+
+bool Poly::isZero() const{
 	return poly.empty();
 }
 

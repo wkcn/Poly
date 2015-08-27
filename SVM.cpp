@@ -188,12 +188,6 @@ void SVM::ClearVar(const string &v){
 }
 
 Poly& SVM::GetVar(const string &name){
-
-	//多项式
-	if (name == "x"){
-		return Poly(1, 1);
-	}
-
 	if (name[0]=='_'){
 		int id;
 		sscanf(name.c_str(), "_%d", &id);
@@ -346,6 +340,9 @@ Poly SVM::GetValue(SExp *s){
 			}
 			else if (s->name == "^"){
 				return pow(GetValue(s->elems[0]), GetValue(s->elems[1]).GetInt());
+			}
+			else if (s->name == "\'") {
+				return GetValue(s->elems[0]).Derivative();
 			}
 			else{
 				//其他函数

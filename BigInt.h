@@ -49,6 +49,7 @@ public:
 	friend bool operator>(const BigInt&, const BigInt&);
 	friend bool operator>=(const BigInt&, const BigInt&);
 	bool isZero();//判断是否为0，用于快速判断
+	bool isMinus();
 	int GetInt();	//获取int值,会取模1 0000 0000
 public:
 	friend ostream& operator<<(ostream &, BigInt &&);

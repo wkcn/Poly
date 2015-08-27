@@ -13,6 +13,9 @@ public:
 	Poly(int num);
 	Poly(const char *);
 	Poly();
+
+	Poly Derivative();
+
 	friend Poly& operator+=(Poly&, const Poly&);
 	friend Poly& operator-=(Poly&, const Poly&);
 	friend Poly& operator*=(Poly&, const Poly&);
@@ -34,7 +37,8 @@ public:
 	friend bool operator>(const Poly&, const Poly&);
 	friend bool operator>=(const Poly&, const Poly&);
 
-	bool isZero();//判断是否为0，用于快速判断
+	bool isZero() const;//判断是否为0，用于快速判断
+	bool isNum() const;
 	int GetInt(); 
 public:
 	friend ostream& operator<<(ostream &, Poly &);

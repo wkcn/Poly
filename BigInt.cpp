@@ -86,6 +86,9 @@ bool operator>=(const BigInt &a, const BigInt &b){
 bool BigInt::isZero(){
 	return num.isZero();
 }
+bool BigInt::isMinus() {
+	return minus;
+}
 int BigInt::GetInt(){
 	int w = num.GetInt();
 	if (minus) w = -w;

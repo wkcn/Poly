@@ -71,6 +71,7 @@ SSugar::SSugar(){
 	level[">="] = 3;
 	level["~"] = 15;
 	level["^"] = 15;
+	level["\'"] = 14;
 	level[","] = 0;
 	level[";"] = 0;
 
@@ -105,6 +106,11 @@ void SSugar::PushS(stack<string> &res, stack<string> &op){
 		if (res.size() < 1)throw "公式错误";
 		string right = res.top(); res.pop();
 		res.push(NewSExp("-", "0", right));
+	}
+	else if (u == "\'"){
+		if (res.size() < 1)throw "公式错误";
+		string left = res.top(); res.pop();
+		res.push(NewSExp("'",left,""));
 	}
 	else{
 		if (res.size() < 2)throw "公式错误";
@@ -191,6 +197,7 @@ string SSugar::Formula2Sexp(string s){
 	catch (...){
 		throw "使用#展开时出现了错误，可能是您需要展开的公式后面没有空格间隔";
 	}
+	if (res.empty())throw "无法展开，原因为没有输入表达式";
 	return res.top();
 }
 
