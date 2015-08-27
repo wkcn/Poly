@@ -53,6 +53,8 @@ int main(){
 			对sen进行解析
 		*/
 
+		if (sen.empty())continue;
+
 		//简单分割测试
 		vector<string> sp;
 		string buf;

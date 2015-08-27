@@ -41,7 +41,7 @@ Poly& operator-=(Poly&a, const Poly&b) {
 			++i;
 		}
 		while (j<b.poly.size() && (i >= a.poly.size() || a.poly[i].second < b.poly[j].second)) {
-			newPoly.push_back(make_pair(-b.poly[i].first,b.poly[i].second));
+			newPoly.push_back(make_pair(-b.poly[j].first,b.poly[j].second));
 			++j;
 		}
 		while (i<a.poly.size() && j < b.poly.size() && a.poly[i].second == b.poly[j].second) {
@@ -66,16 +66,11 @@ Poly& operator*=(Poly&a, const Poly&b) {
 	return a;
 }
 
-Poly& operator/=(Poly&a, const Poly&b) {
-	/*
-	if (!a.isNum() || !b.isNum())throw "无法进行除法计算";
-	a.poly[0].first /= b.poly[0].first;
-	*/
-
+Poly& PolyDivide(Poly &a, const Poly &b, bool mod) {
 	if (b.poly.empty()) throw "不能除以0";
 	Vector<term> newPoly;
 	int offset = 0;
-	while (a.GetExp() >= b.GetExp() && !a.poly.empty() && offset < a.poly.size()) {
+	while (!a.poly.empty() && offset < a.poly.size()) {
 		//下标0为最高次
 		term &at = a.poly[offset];
 		term &bt = b.poly[0];
@@ -85,20 +80,30 @@ Poly& operator/=(Poly&a, const Poly&b) {
 			continue;
 		}
 		BigInt ex = at.second - bt.second;
+		if (ex.isMinus())break;
 		Poly s(co, ex);
 		newPoly.push_back(make_pair(co, ex));
+
+		BigInt lastExp = at.second;//保证被除数对应数的次数降低
+
 		a -= s*b;
+		offset = 0;
+		for (;offset < a.poly.size();++offset) {
+			if (a.poly[offset].second < lastExp)break;
+		}
+
+		if (offset >= a.poly.size())break;
 	}
-
-	a.poly = newPoly;
-
+	if (!mod)a.poly = newPoly;
 	return a;
 }
 
+Poly& operator/=(Poly&a, const Poly&b) {
+	return PolyDivide(a,b,false);
+}
+
 Poly& operator%=(Poly&a, const Poly&b) {
-	if (!a.isNum() || !b.isNum())throw "无法进行取模计算";
-	a.poly[0].first %= b.poly[0].first;
-	return a;
+	return PolyDivide(a, b, true);
 }
 
 Poly operator+(const Poly &a, const Poly &b){
@@ -266,7 +271,7 @@ int Poly::GetInt(){
 
 BigInt Poly::GetExp() const{
 	if (poly.empty())return 0;
-	return poly[poly.size() - 1].second;
+	return poly[0].second;
 }
 
 istream& operator>>(istream &is, Poly &a){
