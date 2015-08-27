@@ -131,11 +131,19 @@ Poly operator%(const Poly &a, const Poly &b){
 	return temp;
 }
 
-Poly pow(const Poly &a, int u){
+Poly pow(const Poly &a,BigInt u){
 	Poly p = a;
 	Poly result = 1;
+	/*
 	for (; u > 0; u >>= 1){
 		if (u & 1){
+			result *= p;
+		}
+		p *= p;
+	}
+	*/
+	for (;!u.isZero();u /= 2) {
+		if (!(u % BigInt(2)).isZero()) {
 			result *= p;
 		}
 		p *= p;
@@ -153,7 +161,17 @@ Poly Poly::Derivative() {
 	return newPoly;
 }
 
-ostream& operator<<(ostream &os, Poly &u){
+Poly Poly::Substitution(const Poly&p) {
+	Poly newPoly;
+	for (int i = 0;i < poly.size();++i) {
+		term &t = poly[i];
+		//cout << Poly(p) << "---" << t.second << endl;
+		newPoly += pow(p, t.second) * Poly(t.first);
+	}
+	return newPoly;
+}
+
+ostream& operator<<(ostream &os,const Poly &u){
 
 	if (u.poly.size() == 0)os << 0;
 	else{

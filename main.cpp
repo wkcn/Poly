@@ -1,4 +1,4 @@
-/*
+﻿/*
 	注意Vector引用&
 */
 
@@ -40,6 +40,9 @@ int main(){
 	vm.SetVar("x", Poly(1, 1));
 
 	while (true){
+
+		vm.SetVar("x", Poly(1, 1));//Poly Project 防止被修改！
+
 		SBuild bu;
 		bu.SetStream(ss);
 		string sen;
@@ -50,23 +53,83 @@ int main(){
 			对sen进行解析
 		*/
 
+		//简单分割测试
+		vector<string> sp;
+		string buf;
+		for (int i = 0;i < sen.size();++i) {
+			if (sen[i] == ' ') {
+				if (!buf.empty())sp.push_back(buf);
+				buf = "";
+			}else{
+				buf += sen[i];
+			}
+		}
+		if (!buf.empty())sp.push_back(buf);
+
+		if(sp.size() >= 1){
+			if (sp[0] == "restart" || sp[0] == "clear" || sp[0] == "cls") {
+				vm.Restart();
+				vm.SetVar("x", Poly(1, 1));
+				cout << "已经重启虚拟机" << endl;
+				continue;
+			}
+		}
+
+		if (sp.size() >= 2) {
+			if (sp[0] == "print" || sp[0] == "show") {
+				if (sp[1] == "all") {
+					vm.PrintAllVars();
+					continue;
+				}
+			}
+		}
+
 		string postsen;
+		string condition;
+		string *psen = &postsen;
 		bool prenum = false;
 		postsen += '#';//SLang展开宏
+		condition += '#';
+		bool sem = false;//分号
+		bool hascon = false;//附加语句，优先级最高
+
+		//psen为string指针，可能会被交换
 		for (int i = 0;i < sen.size();++i) {
 			if (sen[i] == ' ')continue;//ignore blank
+			if (sen[i] == '|') {
+				hascon = true;
+				prenum = false;
+				psen = &condition;
+				continue;
+			}
+			if (sen[i] == ';') {
+				sem = true;
+				break;
+			}
 			if (sen[i] >= '0' && sen[i] <= '9') {
 				prenum = true;
-				postsen += sen[i];
+				*psen += sen[i];
 				continue;
 			}
 			if (sen[i] == 'x' && prenum) {
-				postsen += "*x";
+				*psen += "*x";
 				prenum = false;
 				continue;
 			}
 			prenum = false;
-			postsen += sen[i];
+			*psen += sen[i];
+		}
+
+		Poly conx;
+
+		if (hascon) {
+			//执行附加条件语句
+			SBuild cBuild;
+			streamx cons;
+			cBuild.SetStream(cons);
+			cons << condition;
+			SExp *c = cBuild.Build();
+			conx = vm.Eval(c);
 		}
 
 		ss << postsen;//针对Poly Project 优化~
@@ -76,7 +139,14 @@ int main(){
 		SExp *e = bu.Build();
 		Poly value = vm.Eval(e);
 		vm.SetVar("ans", value);
-		cout << value << endl;
+		//if(!sem)cout << value << endl;
+
+		if (!sem) {
+			//value belongs to class Poly
+			if (hascon)value = value.Substitution(conx);
+			cout << value << endl;
+		}
+
 		DelSExp(e);
 
 	}

@@ -15,6 +15,7 @@ public:
 	Poly();
 
 	Poly Derivative();
+	Poly Substitution(const Poly&);
 
 	friend Poly& operator+=(Poly&, const Poly&);
 	friend Poly& operator-=(Poly&, const Poly&);
@@ -27,7 +28,7 @@ public:
 	friend Poly operator*(const Poly&, const Poly &);
 	friend Poly operator/(const Poly&, const Poly &);
 	friend Poly operator%(const Poly&, const Poly &);
-	friend Poly pow(const Poly&, int u);//出于效率，使用int
+	friend Poly pow(const Poly&, BigInt u);
 
 	//friend int PolyCmp(const Poly&, const Poly&);	//比较用，返回负数时a<b;	0时a=b;	正数时a>b
 	friend bool operator==(const Poly&, const Poly&);
@@ -42,7 +43,7 @@ public:
 	int GetInt(); 
 	BigInt GetExp() const;
 public:
-	friend ostream& operator<<(ostream &, Poly &);
+	friend ostream& operator<<(ostream &,const Poly &);
 	friend istream& operator>>(istream &, Poly &);
 };
 

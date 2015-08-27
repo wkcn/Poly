@@ -138,6 +138,14 @@ void SVM::AddPath(const string &name){
 	path.push_back(name);
 }
 
+void SVM::PrintAllVars() {
+	map<string, Poly>::iterator iter;
+	for (iter = vars.begin();iter != vars.end();++iter) {
+		//不打印数字
+		if(iter->first[0] < '0' || iter->first[0] > '9')cout << iter->first << " = " << iter->second << endl;
+	}
+}
+
 void SVM::Restart(){
 	vars.clear();
 	arrays.clear();

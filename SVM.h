@@ -29,6 +29,7 @@ public:
 	friend class SPar;
 	void AddFunc(const string &name, SFunc f);
 	void AddPath(const string &name);
+	void PrintAllVars();
 
 	void SetVar(const string &name,const Poly &value);
 	void ClearVar(const string &name);	//对某个变量清零
