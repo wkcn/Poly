@@ -148,6 +148,7 @@ void SVM::PrintAllVars() {
 
 void SVM::Restart(){
 	vars.clear();
+	polyVars.clear();
 	arrays.clear();
 	sfuncs.clear();
 }
@@ -196,6 +197,9 @@ void SVM::ClearVar(const string &v){
 }
 
 Poly& SVM::GetVar(const string &name){
+	//cout << "find" << name << endl;
+	if (name == "x")return vars["x"];//递归基，防止死循环
+
 	if (name[0]=='_'){
 		int id;
 		sscanf(name.c_str(), "_%d", &id);
@@ -207,10 +211,21 @@ Poly& SVM::GetVar(const string &name){
 			//数字，这里我故意留一个'Bug'，你可以自己定义某个数字的数值，为了好玩
 		}
 		else{
-			vars[name] = Poly();	//一般变量
+			vars[name] = Poly();	//一般变量(好像没必要再次初始化？)
 		}
 	}
-	return (vars[name]);
+	//return (vars[name]);
+	//多项式系统修改
+	//注意，引用必须要有实例，必须生成实例！！！
+	if (!vars[name].GetExp().isZero() && vars["x"] != Poly(1,1)) {
+		stringstream ss;
+		Poly &pu = vars[name];
+		ss << pu;
+		string pname = ss.str();
+		polyVars[pname] = pu.Substitution(vars["x"]);
+		return polyVars[pname];
+	}
+	return vars[name];
 }
 
 Poly SVM::Eval(SExp *e){
@@ -285,7 +300,8 @@ Poly SVM::GetValue(SExp *s){
 				}
 				return count;
 			}
-			else if (s->name == "*"){
+			//多项式系数增加&运算
+			else if (s->name == "*" || s->name == "&"){
 				Poly count;//累加器
 				if (s->elems.size() > 0)count = GetValue(s->elems[0]);
 				for (int i = 1; i < s->elems.size(); ++i){

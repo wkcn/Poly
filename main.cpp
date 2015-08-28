@@ -108,13 +108,13 @@ int main(){
 				sem = true;
 				break;
 			}
-			if (sen[i] >= '0' && sen[i] <= '9') {
+			if ((sen[i] >= '0' && sen[i] <= '9') || sen[i] == ')') {
 				prenum = true;
 				*psen += sen[i];
 				continue;
 			}
 			if (sen[i] == 'x' && prenum) {
-				*psen += "*x";
+				*psen += "&x";//&符代表系数运算
 				prenum = false;
 				continue;
 			}
@@ -145,7 +145,7 @@ int main(){
 
 		if (!sem) {
 			//value belongs to class Poly
-			if (hascon)value = value.Substitution(conx);
+			//if (hascon)value = value.Substitution(conx);
 			cout << value << endl;
 		}
 

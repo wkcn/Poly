@@ -156,6 +156,7 @@ Poly pow(const Poly &a,BigInt u){
 	return result;
 }
 
+//求导
 Poly Poly::Derivative() {
 	Poly newPoly;
 	for (int i = 0;i < poly.size();++i) {
@@ -166,7 +167,11 @@ Poly Poly::Derivative() {
 	return newPoly;
 }
 
+//代入
 Poly Poly::Substitution(const Poly&p) {
+
+	if (p == Poly(1, 1))return *this;//当以x代换时
+
 	Poly newPoly;
 	for (int i = 0;i < poly.size();++i) {
 		term &t = poly[i];

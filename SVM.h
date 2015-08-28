@@ -12,6 +12,7 @@ typedef Poly (*SFunc)(SPar);	//让参数实例为参数，可能会影响效率
 class SVM{
 private:
 	map<string, Poly> vars;	//红黑树？我觉得内部也是通过new新建元素的，所以就不用指针了
+	map<string, Poly> polyVars;//展开多项式，防止污染vars
 	map<string, Vector<Poly>> arrays;	//数组们	//将来再设置hash
 	map<string, SFunc>funcs;	//C++函数
 	map<string, SExp*>sfuncs;	//Slang函数

@@ -69,8 +69,9 @@ SSugar::SSugar(){
 	level["<="] = 3;
 	level[">"] = 3;
 	level[">="] = 3;
-	level["~"] = 15;
-	level["^"] = 15;
+	level["~"] = 20;
+	level["^"] = 20;
+	level["&"] = 18; //多项式系数
 	level["\'"] = 14;
 	level[","] = 0;
 	level[";"] = 0;
@@ -113,6 +114,7 @@ void SSugar::PushS(stack<string> &res, stack<string> &op){
 		res.push(NewSExp("'",left,""));
 	}
 	else{
+		//二元运算符
 		if (res.size() < 2)throw "公式错误";
 		string right = res.top(); res.pop();
 		string left = res.top(); res.pop();

@@ -19,7 +19,7 @@
 using namespace std;
 
 struct SExp{
-	static enum SEXP_TYPE{
+	enum SEXP_TYPE{
 		VAR, FUNC, COMMAND, IF, WHILE,STR
 	};
 	SEXP_TYPE type;
