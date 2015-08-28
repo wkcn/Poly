@@ -9,7 +9,7 @@ class Poly {
 private:
 	Vector<term> poly;
 public:
-	Poly(BigInt co,BigInt exp);
+	Poly(BigInt co,BigInt exp = 0);
 	Poly(int num);
 	Poly(const char *);
 	Poly();

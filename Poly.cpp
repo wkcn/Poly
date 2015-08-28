@@ -140,13 +140,17 @@ Poly pow(const Poly &a,BigInt u){
 	Poly p = a;
 	Poly result = 1;
 	/*
-	for (; u > 0; u >>= 1){
-		if (u & 1){
+	int j = u.GetInt();
+	
+	for (; j > 0; j >>= 1){
+		if (j & 1){
 			result *= p;
 		}
 		p *= p;
 	}
+	return result;
 	*/
+	
 	for (;!u.isZero();u /= 2) {
 		if (!(u % BigInt(2)).isZero()) {
 			result *= p;
@@ -170,6 +174,7 @@ Poly Poly::Derivative() {
 //代入
 Poly Poly::Substitution(const Poly&p) {
 
+	//cout << p << " To " << *this << endl;
 	if (p == Poly(1, 1))return *this;//当以x代换时
 
 	Poly newPoly;
@@ -177,6 +182,14 @@ Poly Poly::Substitution(const Poly&p) {
 		term &t = poly[i];
 		//cout << Poly(p) << "---" << t.second << endl;
 		newPoly += pow(p, t.second) * Poly(t.first);
+		/*
+		cout << t.first << "!!x!" << p << "^" << t.second << endl;
+		cout << "pow:" << pow(p, t.second) << endl;
+		cout << "SIC" << Poly(t.first) << endl;
+		cout << "==" << pow(p, t.second) * Poly(t.first) << endl;
+		cout << endl;
+		*/
+		
 	}
 	return newPoly;
 }
@@ -191,19 +204,17 @@ ostream& operator<<(ostream &os,const Poly &u){
 
 			bool minus = t.first.isMinus();
 			bool secondZero = t.second.isZero();
-			if (!minus && !first)os << '+';
+			if (!minus && !first)os << " + ";
 
+			BigInt coe = t.first;
 
-			if (t.first != BigInt(1)){
-				if (t.first == BigInt(-1))os << '-';
-				else{
-					os << t.first;
-				}
+			if (t.first.isMinus()) {
+				os << ' - ';
+				coe = -t.first;
 			}
-			else {
-				if (secondZero) {
-					os << t.first;
-				}
+
+			if (t.first != BigInt(1) || secondZero){
+				os << coe;
 			}
 
 			if (!secondZero){

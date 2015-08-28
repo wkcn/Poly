@@ -13,7 +13,7 @@ public:
 	BigInt(const char *);
 
 	operator string();
-	operator int();
+	//operator int();重大Bug！！！
 
 	//运算符(部分使用友元，更适合强制转换）
 	//一元运算

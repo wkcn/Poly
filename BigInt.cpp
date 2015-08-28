@@ -40,9 +40,11 @@ BigInt::operator string(){
 	return ss.str();
 }
 
+/*
 BigInt::operator int(){
 	return GetInt();
 }
+*/
 
 //比较类
 int BigIntCmp(const BigInt &a, const BigInt &b){

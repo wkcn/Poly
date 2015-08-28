@@ -200,6 +200,7 @@ string SSugar::Formula2Sexp(string s){
 		throw "使用#展开时出现了错误，可能是您需要展开的公式后面没有空格间隔";
 	}
 	if (res.empty())throw "无法展开，原因为没有输入表达式";
+	//if (res.size() != 1)throw "表达式错误，可能因为输入公式括号不匹配";
 	return res.top();
 }
 
