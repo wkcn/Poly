@@ -72,7 +72,7 @@ int main(){
 			if (sp[0] == "restart" || sp[0] == "clear" || sp[0] == "cls") {
 				vm.Restart();
 				vm.SetVar("x", Poly(1, 1));
-				cout << "已经重启虚拟机" << endl;
+				cout << "已经重启虚拟机" << endl << endl;
 				continue;
 			}
 		}
@@ -81,6 +81,7 @@ int main(){
 			if (sp[0] == "print" || sp[0] == "show") {
 				if (sp[1] == "all") {
 					vm.PrintAllVars();
+					cout << endl;
 					continue;
 				}
 			}
@@ -146,7 +147,7 @@ int main(){
 		if (!sem) {
 			//value belongs to class Poly
 			//if (hascon)value = value.Substitution(conx);
-			cout << value << endl;
+			cout << value << endl << endl;//多个换行好看点~
 		}
 
 		DelSExp(e);

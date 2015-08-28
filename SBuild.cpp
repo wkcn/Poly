@@ -153,14 +153,16 @@ string SSugar::Formula2Sexp(string s){
 		while (i < s.size()){
 			string c;
 			c += s[i];
-			if (i + 1 < s.size() && level.count(c + s[i + 1]))c += s[++i];
+			if (i + 1 < s.size() && level.count(c + s[i + 1]))c += s[++i];//占两字节的运算符
 			if (level.count(c)){
 				if (c == ")"){
 					string u;
 					while (!op.empty() && (u = op.top()) != "("){
 						PushS(res, op);
 					}
+					//if (u != "(")throw "输入的表达式括号不匹配：没有左括号";
 					if (op.empty())throw "输入的表达式括号不匹配!";
+					//if (op.top() == "(")throw "缺少左括号";
 					op.pop();	//左括号
 				}
 				else{
@@ -189,8 +191,10 @@ string SSugar::Formula2Sexp(string s){
 			}
 		}
 		while (!op.empty()){
+			if (op.top() == "(")throw "括号不匹配,缺少右括号";
 			PushS(res, op);
 		}
+		//op已经为空
 	}
 	catch (const char* msg){
 		cout << msg << endl;
@@ -200,7 +204,7 @@ string SSugar::Formula2Sexp(string s){
 		throw "使用#展开时出现了错误，可能是您需要展开的公式后面没有空格间隔";
 	}
 	if (res.empty())throw "无法展开，原因为没有输入表达式";
-	//if (res.size() != 1)throw "表达式错误，可能因为输入公式括号不匹配";
+	if (res.size() != 1)throw "表达式错误，可能有多个运算段";
 	return res.top();
 }
 
@@ -248,6 +252,7 @@ void SSugar::Update(){
 				if (c == ')'){
 					if (left == 0){
 						//少了左括号
+						throw "括号不匹配，缺少左括号";
 						break;
 					}
 					else{
@@ -259,15 +264,15 @@ void SSugar::Update(){
 				GetC(can, true);	//跳过
 				vn += c;
 			}
-			if (left != 0)throw "括号不匹配";
+			if (left != 0)throw "括号不匹配，缺少右括号";
 			try{
 				string la = Formula2Sexp(vn);
 				for (unsigned int w = 0; w < la.size(); ++w){
 					buf.push(la[w]);
 				}
 			}
-			catch (...){
-				cout << "编译公式错误" << endl;
+			catch (const char *s){
+				cout << s << endl;
 				throw "编译公式错误";
 			}
 		}
@@ -504,7 +509,11 @@ SExp* SBuild::Build(bool first){
 		MarkParent(root);
 		return root;
 	}
-	catch (...){
-		return 0;
+	catch (const char *s){
+		cout << s << endl;
 	}
+	catch (...) {
+		cout << "无法预测的错误" << endl;
+	}
+	return 0;
 }
