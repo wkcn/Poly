@@ -138,12 +138,14 @@ Poly operator%(const Poly &a, const Poly &b){
 
 BigInt Poly::GetBigInt() const{
 	if (!isNum())return 0;
+	if (poly.empty())return 0;
 	return poly[0].first;
 }
 
 Poly pow(const Poly &a,const Poly &b){
 	if (!b.isNum())throw "指数必须为数字！";
 	BigInt u = b.GetBigInt();
+	if (u.isMinus())throw "目前暂不支持负数次方运算";
 	Poly p = a;
 	Poly result = 1;
 	/*

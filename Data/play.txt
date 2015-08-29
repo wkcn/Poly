@@ -14,6 +14,7 @@
 		(for #i=0 #i<=o #i=i+1 (\
 			(= temp (rand))
 			#temp%=100
+			#temp-=50
 			#a+=temp*d
 			#d*=x
 		))
@@ -21,6 +22,7 @@
 		(for #i=0 #i<=o #i=i+1 (\
 			(= temp (rand))
 			#temp%=100
+			#temp-=50
 			#b+=temp*d
 			#d*=x
 		))
