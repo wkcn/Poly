@@ -1,0 +1,9 @@
+(\
+	(print "Poly -- 一个高精度整数多项式计算器")
+	(print "基于我的另一个项目SLang")
+	(print "SLang是一个S-表达式,高精度整数运算的脚本语言解释器")
+	(print "Poly项目使用了SLang的#公式展开语法糖")
+	(print "Poly: https://github.com/wkcn/Poly")
+	(print "SLang: https://github.com/wkcn/SLang")
+	(print "CopyRight: WKCN")
+)

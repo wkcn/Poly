@@ -13,29 +13,18 @@ using namespace std;
 
 int main(){
 
-	/*
-	Poly a = -2;
-	Poly t(1, 1);
-	a += t;
-	cout << a << endl;
-	Poly b = pow(a, 2);
-	cout << b << endl;
-	cout << pow(a, 3) << endl;
-	*/
-
-	//Poly a(1, 1);
-	//cout << a << endl;
-
+	//使用SLang Virual Machine
 	SVM vm;
 	streamx ss;
 	srand(size_t(time(0)));
 
-	//帮助文件
+	//读取ReadMe
 	SBuild readme;
-	//streamx rs;
-	//rs << "(readme)";
-	//readme.SetStream(rs);
-	//vm.Eval(readme.Build());
+
+	streamx rs;
+	rs << "(readme)";
+	readme.SetStream(rs);
+	vm.Eval(readme.Build());
 
 	vm.SetVar("x", Poly(1, 1));
 
@@ -69,21 +58,44 @@ int main(){
 		if (!buf.empty())sp.push_back(buf);
 
 		if(sp.size() >= 1){
+			//Restart
 			if (sp[0] == "restart" || sp[0] == "clear" || sp[0] == "cls") {
 				vm.Restart();
 				vm.SetVar("x", Poly(1, 1));
 				cout << "已经重启虚拟机" << endl << endl;
 				continue;
 			}
-		}
-
-		if (sp.size() >= 2) {
+			//退出
+			if (sp[0] == "quit" || sp[0] == "exit") {
+				return 0;
+			}
+			//显示全部变量
+			if (sp[0] == "all") {
+				vm.PrintAllVars();
+				cout << endl;
+				continue;
+			}
 			if (sp[0] == "print" || sp[0] == "show") {
-				if (sp[1] == "all") {
+				if (sp.size() >= 2 && sp[1] == "all") {
 					vm.PrintAllVars();
 					cout << endl;
 					continue;
 				}
+				else {
+					cout << "如果需要查看某个变量的值，请直接输入该变量名称" << endl << endl;
+					continue;
+				}
+			}
+			//一些命令
+			if (sp[0] == "help" || sp[0] == "play" || sp[0] == "about") {
+				cout << endl;
+				rs << "(";
+				rs << sp[0];
+				rs << ")";
+				readme.SetStream(rs);
+				vm.Eval(readme.Build());
+				cout << endl;
+				continue;
 			}
 		}
 

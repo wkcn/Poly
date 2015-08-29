@@ -56,11 +56,11 @@ SSugar::SSugar(){
 	level["*"] = 11;
 	level["/"] = 11;
 	level["%"] = 11;
-	level["+="] = 12;
-	level["-="] = 12;
-	level["*="] = 13;
-	level["/="] = 13;
-	level["%="] = 13;
+	level["+="] = 8;
+	level["-="] = 8;
+	level["*="] = 9;
+	level["/="] = 9;
+	level["%="] = 9;
 	level["("] = 0;
 	level[")"] = 0;
 	level["=="] = 3;
@@ -198,10 +198,12 @@ string SSugar::Formula2Sexp(string s){
 	}
 	catch (const char* msg){
 		cout << msg << endl;
-		throw "使用#展开时出现了错误，可能是您需要展开的公式后面没有空格间隔";
+		throw "展开公式时发生错误";
+		//throw "使用#展开时出现了错误，可能是您需要展开的公式后面没有空格间隔";
 	}
 	catch (...){
-		throw "使用#展开时出现了错误，可能是您需要展开的公式后面没有空格间隔";
+		throw "展开公式时发生错误";
+		//throw "使用#展开时出现了错误，可能是您需要展开的公式后面没有空格间隔";
 	}
 	if (res.empty())throw "无法展开，原因为没有输入表达式";
 	if (res.size() != 1)throw "表达式错误，可能有多个运算段";

@@ -44,8 +44,55 @@ Poly SClear(SPar par){
 }
 
 Poly SInput(SPar par){
+	/*
+	Vector<BigInt> b;
 	for (int i = 0; i < par.size(); ++i){
-		cin >> par[i];
+		cin >> b[i];//par[i];
+	}
+	for (int i = 0;i < par.size();++i) {
+		par[i] = Poly(b[i]);
+	}
+	*/
+	//Poly Project
+	for (int i = 0;i < par.size();++i) {
+		string sen;
+		getline(cin, sen);
+
+		string postsen;
+		string *psen = &postsen;
+		bool prenum = false;
+		postsen += '#';//SLang展开宏
+		bool sem = false;//分号
+
+		//psen为string指针，可能会被交换
+		for (int i = 0;i < sen.size();++i) {
+			if (sen[i] == ' ')continue;//ignore blank
+			if (sen[i] == ';') {
+				sem = true;
+				break;
+			}
+			if ((sen[i] >= '0' && sen[i] <= '9') || sen[i] == ')') {
+				prenum = true;
+				*psen += sen[i];
+				continue;
+			}
+			if (sen[i] == 'x' && prenum) {
+				*psen += "&x";//&符代表系数运算
+				prenum = false;
+				continue;
+			}
+			prenum = false;
+			*psen += sen[i];
+		}
+
+		SVM vm;
+		vm.SetVar("x", Poly(1, 1));//重要！
+		streamx ss;
+		SBuild bu;
+		bu.SetStream(ss);
+		ss << postsen;
+		SExp *e = bu.Build();
+		par[i] = vm.Eval(e);
 	}
 	return Poly();
 }
@@ -363,7 +410,7 @@ Poly SVM::GetValue(SExp *s){
 				return (GetValue(s->elems[0]) >= GetValue(s->elems[1]));
 			}
 			else if (s->name == "^"){
-				return pow(GetValue(s->elems[0]), GetValue(s->elems[1]).GetInt());
+				return pow(GetValue(s->elems[0]), GetValue(s->elems[1]));
 			}
 			else if (s->name == "\'") {
 				return GetValue(s->elems[0]).Derivative();
@@ -409,6 +456,9 @@ Poly SVM::GetValue(SExp *s){
 						char temp[64];
 						fvm.debug = debug;
 						fvm.SetParent(this);
+
+						//Poly Project
+						fvm.SetVar("x", GetVar("x"));
 
 						//fvm.vars["_0"] = Poly(s->elems.size());	//_0变量为参数个数，第一个参数叫_1
 						fvm.SetArray("_", 0, Poly(s->elems.size()));

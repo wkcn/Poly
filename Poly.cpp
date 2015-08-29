@@ -136,7 +136,14 @@ Poly operator%(const Poly &a, const Poly &b){
 	return temp;
 }
 
-Poly pow(const Poly &a,BigInt u){
+BigInt Poly::GetBigInt() const{
+	if (!isNum())return 0;
+	return poly[0].first;
+}
+
+Poly pow(const Poly &a,const Poly &b){
+	if (!b.isNum())throw "指数必须为数字！";
+	BigInt u = b.GetBigInt();
 	Poly p = a;
 	Poly result = 1;
 	/*
@@ -174,21 +181,12 @@ Poly Poly::Derivative() {
 //代入
 Poly Poly::Substitution(const Poly&p) {
 
-	//cout << p << " To " << *this << endl;
 	if (p == Poly(1, 1))return *this;//当以x代换时
 
 	Poly newPoly;
 	for (int i = 0;i < poly.size();++i) {
 		term &t = poly[i];
-		//cout << Poly(p) << "---" << t.second << endl;
 		newPoly += pow(p, t.second) * Poly(t.first);
-		/*
-		cout << t.first << "!!x!" << p << "^" << t.second << endl;
-		cout << "pow:" << pow(p, t.second) << endl;
-		cout << "SIC" << Poly(t.first) << endl;
-		cout << "==" << pow(p, t.second) * Poly(t.first) << endl;
-		cout << endl;
-		*/
 		
 	}
 	return newPoly;
@@ -204,22 +202,28 @@ ostream& operator<<(ostream &os,const Poly &u){
 
 			bool minus = t.first.isMinus();
 			bool secondZero = t.second.isZero();
-			if (!minus && !first)os << " + ";
 
 			BigInt coe = t.first;
+			const BigInt one(1);
+
+			//符号
+
+			if (!minus && !first)os << " + ";
 
 			if (t.first.isMinus()) {
-				os << ' - ';
+				if (first)os << "-";
+				else os << " - ";
 				coe = -t.first;
 			}
 
-			if (t.first != BigInt(1) || secondZero){
+			//显示非1或非-1的x^i（i!=0）项或常数项
+			if (t.first != one || secondZero){
 				os << coe;
 			}
 
 			if (!secondZero){
 				os << 'x';
-				if (t.second != BigInt(1)){
+				if (t.second != one){
 					os << '^';
 					os << t.second;
 				}
@@ -247,21 +251,33 @@ bool operator!=(const Poly&a, const Poly&b){
 
 bool operator<(const Poly&a, const Poly&b){
 	if (!a.isNum() || !b.isNum())throw "无法比较";
+	if (a.poly.size() == 0 && b.poly.size() == 0)return false;
+	if (a.poly.size() == 0)return BigInt(0) < b.poly[0].first;
+	if (b.poly.size() == 0)return a.poly[0].first < BigInt(0);
 	return a.poly[0].first < b.poly[0].first;
 }
 
 bool operator<=(const Poly&a, const Poly&b){
 	if (!a.isNum() || !b.isNum())throw "无法比较";
+	if (a.poly.size() == 0 && b.poly.size() == 0)return false;
+	if (a.poly.size() == 0)return BigInt(0) <= b.poly[0].first;
+	if (b.poly.size() == 0)return a.poly[0].first <= BigInt(0);
 	return a.poly[0].first <= b.poly[0].first;
 }
 
 bool operator>(const Poly&a, const Poly&b){
 	if (!a.isNum() || !b.isNum())throw "无法比较";
+	if (a.poly.size() == 0 && b.poly.size() == 0)return false;
+	if (a.poly.size() == 0)return BigInt(0) > b.poly[0].first;
+	if (b.poly.size() == 0)return a.poly[0].first > BigInt(0);
 	return a.poly[0].first > b.poly[0].first;
 }
 
 bool operator>=(const Poly&a, const Poly&b){
 	if(!a.isNum()||!b.isNum())throw "无法比较";
+	if (a.poly.size() == 0 && b.poly.size() == 0)return false;
+	if (a.poly.size() == 0)return BigInt(0) >= b.poly[0].first;
+	if (b.poly.size() == 0)return a.poly[0].first >= BigInt(0);
 	return a.poly[0].first >= b.poly[0].first;
 }
 
@@ -277,11 +293,8 @@ bool Poly::isZero() const{
 
 int Poly::GetInt(){
 	if (poly.empty())return 0;
-	for (int i = 0; i < poly.size(); ++i){
-		if (poly[i].second.isZero()){
-			return poly[i].first.GetInt();
-		}
-	}
+	int u = poly.size() - 1;//最低项在尾部
+	if (poly[u].second.isZero())return poly[u].first.GetInt();
 	return 0;
 }
 

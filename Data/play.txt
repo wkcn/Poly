@@ -1,0 +1,43 @@
+(\
+	(print "请输入你想挑战的最高多项式次数")
+	(input o)
+	(while #o<=0 (\
+		(print "请重新输入一个正整数")
+		(input o)
+	))
+	#start=1
+	(while start
+		(print "开始答题：请输入以下两个多项式的和")
+		#a=0
+		#b=0
+		#d=1
+		(for #i=0 #i<=o #i=i+1 (\
+			(= temp (rand))
+			#temp%=100
+			#a+=temp*d
+			#d*=x
+		))
+		#d=1
+		(for #i=0 #i<=o #i=i+1 (\
+			(= temp (rand))
+			#temp%=100
+			#b+=temp*d
+			#d*=x
+		))
+		(print a)
+		(print b)
+		(input myans)
+		#c=a+b
+		(if #c==myans (\
+			(print "回答正确，你真棒！")
+		)(\
+			(print "你的输入是:" myans)
+			(print "你错啦~ 正确答案为" c)
+		))
+		(print "")
+		(print "是否继续？输入负数表示退出")
+		(input w)
+		(if #w<0 #start=0 )
+	)
+	(print "欢迎下次来玩~")
+)
