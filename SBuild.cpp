@@ -284,7 +284,7 @@ void SSugar::Update(){
 				string vn;
 				while (can){
 					c = GetC(can);
-					if (!can || c == '\n' || c == '-1'){
+					if (!can || c == '\n' || c == -1){
 						break;
 					}
 					vn += c;
