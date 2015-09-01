@@ -219,7 +219,7 @@ ostream& operator<<(ostream &os,const Poly &u){
 			}
 
 			//显示非1或非-1的x^i（i!=0）项或常数项
-			if (t.first != one || secondZero){
+			if (coe != one || secondZero){
 				os << coe;
 			}
 
