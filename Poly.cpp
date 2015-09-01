@@ -261,7 +261,7 @@ bool operator<(const Poly&a, const Poly&b){
 
 bool operator<=(const Poly&a, const Poly&b){
 	if (!a.isNum() || !b.isNum())throw "无法比较";
-	if (a.poly.size() == 0 && b.poly.size() == 0)return false;
+	if (a.poly.size() == 0 && b.poly.size() == 0)return true;
 	if (a.poly.size() == 0)return BigInt(0) <= b.poly[0].first;
 	if (b.poly.size() == 0)return a.poly[0].first <= BigInt(0);
 	return a.poly[0].first <= b.poly[0].first;
@@ -277,7 +277,7 @@ bool operator>(const Poly&a, const Poly&b){
 
 bool operator>=(const Poly&a, const Poly&b){
 	if(!a.isNum()||!b.isNum())throw "无法比较";
-	if (a.poly.size() == 0 && b.poly.size() == 0)return false;
+	if (a.poly.size() == 0 && b.poly.size() == 0)return true;
 	if (a.poly.size() == 0)return BigInt(0) >= b.poly[0].first;
 	if (b.poly.size() == 0)return a.poly[0].first >= BigInt(0);
 	return a.poly[0].first >= b.poly[0].first;
